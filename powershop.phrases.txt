@@ -1,0 +1,41 @@
+"Phrases"
+{
+	//Common
+	//Database
+	"Database_reset"
+	{
+		"en"		"Reseting database..."
+		"de"		"Setze Datenbank zurück..."
+		"lv"		"Pārlādē datubāzi..."
+		"hu"		"Adatbázis nullázása..."
+		"pt-br"		"Reiniciando database..."
+		"fr"		"Remise a 0 de la base de données"
+		"tr"		"Veritabanı sıfırlanıyor..."
+	}
+	"Database_failed"
+	{
+		"#format"	"{1:s}"
+		"en"		"Database failure: {1}";
+		"de"		"Datenbank Fehler: {1}";
+		"lv"		"Datubāzes kļūda: {1}"
+		"hu"		"Adatbázis hiba: {1}"
+		"pt-br"		"Falha na database: {1}"
+		"fr"		"Base de données défecteux: {1}"
+		"tr"		"Veritabanı hatası: {1}";
+	}
+	//menu
+	"menu_yes"
+	{
+		"en"		"Yes"
+		"de"		"Ja"
+		"fr"		"Oui"
+		"tr"		"Evet"
+	}
+	"menu_no"
+	{
+		"en"		"No"
+		"de"		"Nein"
+		"fr"		"Non"
+		"tr"		"Hayır"
+	}
+}
