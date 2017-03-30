@@ -147,8 +147,10 @@ public void OnConfigsExecuted()
 
 public void OnClientPostAdminFilter(int client)
 {
-	if(!IsValidClientContract(client))
+	PrintToServer("!!!!!!!");
+	if(IsFakeClient(client))
 		return;
+	PrintToServer("!!!!!!!");
 		
 	char query[400];
 	char steamID[45];
@@ -171,7 +173,6 @@ public void OnClientDisconnect(int client)
 	GetClientAuthId(client, AuthId_SteamID64, steamID, sizeof(steamID));
 	SQL_EscapeString(DATABASE_PowerShop, clientName, clientName, sizeof(clientName));
 	
-	PrintToServer(">>>> %i", credits[client]);
 	Format(query, sizeof(query), QUERY_UPDATE_CLIENT_INFOS, clientName, credits[client], steamID);
 	
 	DBFastQuery(query);
@@ -1056,17 +1057,4 @@ stock void ApplyUpgrades(int client, char[] attr, float value, bool isAttribute)
 		attrValue += value;
 		SetEntPropFloat(client, Prop_Send, attr, attrValue);
 	}
-}
-
-stock bool IsValidClientContract (int iClient, bool bReplay = true)
-{
-	if (iClient <= 0 || iClient > MaxClients)
-		return false;
-	if (!IsClientInGame(iClient))
-		return false;
-	if(IsFakeClient(iClient))
-		return false;
-	if (bReplay && (IsClientSourceTV(iClient) || IsClientReplay(iClient)))
-		return false;
-	return true;
 }
