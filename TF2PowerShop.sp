@@ -91,7 +91,7 @@ char upgradetype[30];
 char menuItemName[45];
 
 bool isAttributes[MAXPLAYERS + 1];
-bool debugMode = true; //false;
+bool debugMode = false; //true;
 
 public Plugin myinfo = 
 {
@@ -147,6 +147,9 @@ public void OnConfigsExecuted()
 
 public void OnClientPostAdminFilter(int client)
 {
+	if(!IsValidClientContract(client))
+		return;
+		
 	char query[400];
 	char steamID[45];
 	GetClientAuthId(client, AuthId_SteamID64, steamID, sizeof(steamID));
@@ -290,7 +293,7 @@ public int MenuHandle_OptionChoose(Handle menu, MenuAction action, int client, i
 		
 		if (StrEqual(description, "return"))
 		{
-			DisplayPreviousMenu(client);
+			DisplayMainMenu(client);
 			return;
 		}
 		
@@ -598,17 +601,14 @@ public void DisplayRAMenu(int client)
 
 public void DisplayPreviousMenu(int client)
 {
-	/*if(actualMenu[client] == MENU_MAINMENU)
-		DisplayMainMenu(client);
-	else if(actualMenu[client] == MENU_PHYSIUPG)
+	if(actualMenu[client] == MENU_PHYSIUPG)	
 		DisplayPUMenu(client);
 	else if(actualMenu[client] == MENU_WEAPOUPG)
 		DisplayWUMenu(client);
 	else if(actualMenu[client] == MENU_OTHERUPG)
 		DisplayOUMenu(client);
-	else if(actualMenu[client] == MENU_REFUNUPG)
-		DisplayRAMenu(client);*/
-	DisplayMainMenu(client);
+	else// if(actualMenu[client] == MENU_REFUNUPG)
+		DisplayMainMenu(client);
 }
 
 public void DisplayInfoPanel(int client, const char[] line1, const char[] line2, const char[] line3, int cost)
@@ -1056,4 +1056,17 @@ stock void ApplyUpgrades(int client, char[] attr, float value, bool isAttribute)
 		attrValue += value;
 		SetEntPropFloat(client, Prop_Send, attr, attrValue);
 	}
+}
+
+stock bool IsValidClientContract (int iClient, bool bReplay = true)
+{
+	if (iClient <= 0 || iClient > MaxClients)
+		return false;
+	if (!IsClientInGame(iClient))
+		return false;
+	if(IsFakeClient(iClient))
+		return false;
+	if (bReplay && (IsClientSourceTV(iClient) || IsClientReplay(iClient)))
+		return false;
+	return true;
 }
