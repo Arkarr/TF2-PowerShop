@@ -306,12 +306,12 @@ public int MenuHandle_OptionChoose(Handle menu, MenuAction action, int client, i
 				result = TF2Attrib_GetValue(address);
 			
 			
-			if (result >= StringToFloat(maxValue) && StringToFloat(maxValue) > 0.0)
+			if (result >= StringToFloat(maxValue) && StringToFloat(maxValue) >= 0.0)
 			{
 				CPrintToChat(client, "%s Sorry, you can't buy this upgrade anymore.", PLUGIN_TAG);
 				DisplayPreviousMenu(client);
 			}
-			else if (result <= StringToFloat(maxValue) && StringToFloat(maxValue) < 0.0)
+			else if (result <= StringToFloat(maxValue) && StringToFloat(maxValue) <= 0.0)
 			{
 				CPrintToChat(client, "%s Sorry, you can't buy this upgrade anymore.", PLUGIN_TAG);
 				DisplayPreviousMenu(client);
