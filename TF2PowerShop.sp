@@ -147,20 +147,10 @@ public void OnConfigsExecuted()
 
 public void OnClientPostAdminFilter(int client)
 {
-	PrintToServer("!!!!!!!");
 	if(IsFakeClient(client))
 		return;
-	PrintToServer("!!!!!!!");
 		
-	char query[400];
-	char steamID[45];
-	GetClientAuthId(client, AuthId_SteamID64, steamID, sizeof(steamID));
-	
-	Format(query, sizeof(query), QUERY_SELECT_UPGRADECLIENTC, steamID);
-	SQL_TQuery(DATABASE_PowerShop, RefundClient, query, GetClientUserId(client));
-	
-	Format(query, sizeof(query), QUERY_SELECT_CLIENTUPGRADE, steamID);
-	SQL_TQuery(DATABASE_PowerShop, GetClientUpgrades, query, GetClientUserId(client));
+	LoadClientUpgrades(client);
 }
 
 public void OnClientDisconnect(int client)
@@ -707,6 +697,12 @@ public void GotDatabase(Handle owner, Handle hndl, const char[] error, any data)
 			ReadConfigFile();
 			
 			PrintToServer("[TF2 Power Shop] Connected to the database sucessfully !");
+			
+			for (int i = MaxClients; i > 0; --i)
+			{
+				if (IsValidClient(i) && !IsFakeClient(i))
+					LoadClientUpgrades(i);
+			}
 		}
 	}
 }
@@ -865,7 +861,6 @@ public void GetClientInfos(Handle db, Handle results, const char[] error, any da
 		
 		if (!StrEqual(clientName, sqlClientName))
 		{
-			PrintToServer(">>>> %i", credits[client]);
 			Format(query, sizeof(query), QUERY_UPDATE_CLIENT_INFOS, clientName, credits[client], steamID);
 			DBFastQuery(query);
 		}
@@ -884,9 +879,9 @@ public void UpdateUpgrade(Handle db, Handle results, const char[] error, any dat
 	int upID;
 	int uptype;
 	int upcost;
-	int upmaxval;
-	int upincval;
-	int updefval;
+	float upmaxval;
+	float upincval;
+	float updefval;
 	char upattrname[50];
 	
 	char upTrieType[10];
@@ -921,16 +916,16 @@ public void UpdateUpgrade(Handle db, Handle results, const char[] error, any dat
 		upID = SQL_FetchInt(results, 0);
 		uptype = SQL_FetchInt(results, 1);
 		upcost = SQL_FetchInt(results, 2);
-		upmaxval = SQL_FetchInt(results, 3);
-		upincval = SQL_FetchInt(results, 4);
-		updefval = SQL_FetchInt(results, 5);
+		upmaxval = SQL_FetchFloat(results, 3);
+		upincval = SQL_FetchFloat(results, 4);
+		updefval = SQL_FetchFloat(results, 5);
 		SQL_FetchString(results, 6, upattrname, sizeof(upattrname));
 		
 		if (uptype != StringToInt(upTrieType) || 
 			upcost != StringToInt(upTrieCost) || 
-			upmaxval != StringToInt(upTrieMaxVal) || 
-			upincval != StringToInt(upTrieIncVal) || 
-			updefval != StringToInt(upTrieDefVal) || 
+			upmaxval != StringToFloat(upTrieMaxVal) || 
+			upincval != StringToFloat(upTrieIncVal) || 
+			updefval != StringToFloat(upTrieDefVal) || 
 			!StrEqual(upTrieName, upattrname)
 			)
 		{
@@ -957,10 +952,7 @@ public void UpdateUpgrade(Handle db, Handle results, const char[] error, any dat
 public bool DBFastQuery(const char[] sql)
 {
 	if (debugMode)
-	{
-		PrintToServer("New query :");
 		PrintToServer(sql);
-	}
 	
 	char error[400];
 	SQL_FastQuery(DATABASE_PowerShop, sql);
@@ -983,6 +975,19 @@ stock bool IsValidClient(int client)
 	if (!IsClientConnected(client))return false;
 	return IsClientInGame(client);
 } 
+
+stock void LoadClientUpgrades(int client)
+{
+	char query[400];
+	char steamID[45];
+	GetClientAuthId(client, AuthId_SteamID64, steamID, sizeof(steamID));
+	
+	Format(query, sizeof(query), QUERY_SELECT_UPGRADECLIENTC, steamID);
+	SQL_TQuery(DATABASE_PowerShop, RefundClient, query, GetClientUserId(client));
+	
+	Format(query, sizeof(query), QUERY_SELECT_CLIENTUPGRADE, steamID);
+	SQL_TQuery(DATABASE_PowerShop, GetClientUpgrades, query, GetClientUserId(client));
+}
 
 stock bool ReadConfigFile()
 {
