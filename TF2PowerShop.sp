@@ -1,6 +1,6 @@
 #include <sourcemod>
 #include <sdktools>
-#include <multicolors>
+#include <morecolors>
 #include <tf2attributes>
 
 #pragma newdecls required
@@ -34,25 +34,25 @@
 #define UPGRADE_WEAPO 2
 #define UPGRADE_OTHER 3
 
-#define QUERY_CREATE_T_CLIENTS		"CREATE TABLE IF NOT EXISTS `PowerShop`.`t_client` (`client_steamid64` VARCHAR(50) NOT NULL,`client_credits` INT(11) NOT NULL,`client_name` VARCHAR(50) NOT NULL,PRIMARY KEY (`client_steamid64`))ENGINE = InnoDB DEFAULT CHARACTER SET = latin1;"
-#define QUERY_CREATE_T_UPGRADES		"CREATE TABLE IF NOT EXISTS `PowerShop`.`t_upgrade` ( `upgrade_id` INT(11) NOT NULL, `upgrade_name` VARCHAR(45) NOT NULL, `upgrade_type` VARCHAR(15) NOT NULL, `upgrade_cost` INT(11) NOT NULL, `upgrade_description1` VARCHAR(100) NOT NULL, `upgrade_description2` VARCHAR(100) NOT NULL, `upgrade_maxvalue` DOUBLE NOT NULL, `upgrade_increasevalue` DOUBLE NOT NULL, `upgrade_defaultvalue` DOUBLE NOT NULL, `upgrade_attributname` VARCHAR(100) NOT NULL, PRIMARY KEY (`upgrade_id`))  ENGINE = InnoDB  DEFAULT CHARACTER SET = latin1;"
-#define QUERY_RESET_T_CLIENTUPGRADE	"CREATE TABLE IF NOT EXISTS `PowerShop`.`t_clientupgrade` ( `clientupgrade_currentvalue` VARCHAR(50) NOT NULL,`clientupgrade_attributname` VARCHAR(100) NOT NULL, `clientupgrade_spent` INT(11) NOT NULL, `has_changed` INT(11) NOT NULL, `t_client_steamid64` VARCHAR(50) NOT NULL, `t_upgrade_id` INT(11) NOT NULL AUTO_INCREMENT, INDEX `fk_t_clientupgrade_t_client1_idx` (`t_client_steamid64` ASC), INDEX `fk_t_clientupgrade_t_upgrade1_idx` (`t_upgrade_id` ASC), CONSTRAINT PK_Person PRIMARY KEY (`t_upgrade_id`))  ENGINE = InnoDB  DEFAULT CHARACTER SET = latin1;"
-#define QUERY_GET_CLIENT_INFOS		"SELECT `client_credits`,`client_name` FROM `PowerShop`.`t_client` WHERE `client_steamid64`=\"%s\""
-#define QUERY_UPDATE_CLIENT_INFOS	"UPDATE `PowerShop`.`t_client` SET `client_name`=\"%s\", `client_credits`=%i WHERE `client_steamid64`=\"%s\";"
-#define QUERY_INSERT_CLIENT			"INSERT INTO `PowerShop`.`t_client` (`client_steamid64`,`client_name`,`client_credits`) VALUES (\"%s\", \"%s\", %i);"
-#define QUERY_INSERT_UPGRADE		"INSERT INTO `PowerShop`.`t_upgrade` (`upgrade_id`, `upgrade_name`, `upgrade_type`, `upgrade_cost`, `upgrade_description1`, `upgrade_description2`, `upgrade_maxvalue`, `upgrade_increasevalue`, `upgrade_defaultvalue`, `upgrade_attributname`) VALUES (\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\");"
-#define QUERY_SELECT_UPGRADE		"SELECT `upgrade_id`, `upgrade_type`, `upgrade_cost`, `upgrade_maxvalue`, `upgrade_increasevalue`, `upgrade_defaultvalue`, `upgrade_attributname` FROM `PowerShop`.`t_upgrade` WHERE `upgrade_id`=\"%s\""
-#define QUERY_UPDATE_UPGRADE		"UPDATE `PowerShop`.`t_upgrade` SET `upgrade_type`=\"%s\", `upgrade_cost`=\"%s\", `upgrade_maxvalue`=\"%s\", `upgrade_increasevalue`=\"%s\", `upgrade_defaultvalue`=\"%s\", `upgrade_attributname`=\"%s\", `upgrade_description1`=\"%s\", `upgrade_description2`=\"%s\" WHERE `upgrade_id`=\"%i\""
-#define QUERY_UPDATE_CLIENTUPGRADE	"UPDATE `PowerShop`.`t_clientupgrade` SET `has_changed` = 1 WHERE `t_upgrade_id`=\"%i\""
-#define QUERY_SELECT_UPGRADECLIENTC	"SELECT `clientupgrade_spent` FROM `PowerShop`.`t_clientupgrade` WHERE `t_client_steamid64`=\"%s\" AND `has_changed`=1"
-#define QUERY_UPDATE_CLIENTCREDIT	"UPDATE `PowerShop`.`t_client` SET `client_credits`=`client_credits`+%i WHERE `client_steamid64`=\"%s\""
-#define QUERY_DELETE_CLIENTUPGRADEC	"DELETE FROM `PowerShop`.`t_clientupgrade` WHERE `has_changed`=1 AND `t_client_steamid64`=\"%s\"; "
-#define QUERY_SELECT_CLIENTUPGRADE	"SELECT `clientupgrade_attributname`, `clientupgrade_currentvalue` FROM `PowerShop`.`t_clientupgrade` WHERE `t_client_steamid64`=\"%s\"; "
-#define QUERY_SELECT_CLIENTUPBYID	"SELECT `clientupgrade_attributname`, `clientupgrade_currentvalue`, `clientupgrade_spent` FROM `PowerShop`.`t_clientupgrade` WHERE `t_client_steamid64`=\"%s\" AND `t_upgrade_id`=\"%i\";"
-#define QUERY_UPDATE_CLIENTUPBYID	"UPDATE `PowerShop`.`t_clientupgrade` SET `clientupgrade_currentvalue`=\"%.2f\", `clientupgrade_spent`=%i WHERE `t_client_steamid64`=\"%s\" AND `t_upgrade_id`=\"%i\";"
-#define QUERY_INSERT_CLIENTUPBYID	"INSERT INTO `PowerShop`.`t_clientupgrade` (`clientupgrade_currentvalue`, `clientupgrade_attributname`, `clientupgrade_spent`, `has_changed`, `t_client_steamid64`, `t_upgrade_id`) VALUES ('%.2f', '%s', '%i', '0', '%s', '%i')"
-#define QUERY_DELETE_ALLBOUGHTUPGRD	"DELETE FROM `PowerShop`.`t_clientupgrade` WHERE `t_client_steamid64`=\"%s\";"
-#define QUERY_SELECT_ALLUPGRDCLIENT	"SELECT `clientupgrade_spent` FROM `PowerShop`.`t_clientupgrade` WHERE `t_client_steamid64`=\"%s\""
+#define QUERY_CREATE_T_CLIENTS		"CREATE TABLE IF NOT EXISTS `t_client` (`client_steamid64` VARCHAR(50) NOT NULL,`client_credits` INT(11) NOT NULL,`client_name` VARCHAR(50) NOT NULL,PRIMARY KEY (`client_steamid64`))ENGINE = InnoDB DEFAULT CHARACTER SET = latin1;"
+#define QUERY_CREATE_T_UPGRADES		"CREATE TABLE IF NOT EXISTS `t_upgrade` ( `upgrade_id` INT(11) NOT NULL, `upgrade_name` VARCHAR(45) NOT NULL, `upgrade_type` VARCHAR(15) NOT NULL, `upgrade_cost` INT(11) NOT NULL, `upgrade_description1` VARCHAR(100) NOT NULL, `upgrade_description2` VARCHAR(100) NOT NULL, `upgrade_maxvalue` DOUBLE NOT NULL, `upgrade_increasevalue` DOUBLE NOT NULL, `upgrade_defaultvalue` DOUBLE NOT NULL, `upgrade_attributname` VARCHAR(100) NOT NULL, PRIMARY KEY (`upgrade_id`))  ENGINE = InnoDB  DEFAULT CHARACTER SET = latin1;"
+#define QUERY_RESET_T_CLIENTUPGRADE	"CREATE TABLE IF NOT EXISTS `t_clientupgrade` ( `clientupgrade_currentvalue` VARCHAR(50) NOT NULL,`clientupgrade_attributname` VARCHAR(100) NOT NULL, `clientupgrade_spent` INT(11) NOT NULL, `has_changed` INT(11) NOT NULL, `t_client_steamid64` VARCHAR(50) NOT NULL, `t_upgrade_id` INT(11) NOT NULL AUTO_INCREMENT, INDEX `fk_t_clientupgrade_t_client1_idx` (`t_client_steamid64` ASC), INDEX `fk_t_clientupgrade_t_upgrade1_idx` (`t_upgrade_id` ASC), CONSTRAINT PK_Person PRIMARY KEY (`t_upgrade_id`))  ENGINE = InnoDB  DEFAULT CHARACTER SET = latin1;"
+#define QUERY_GET_CLIENT_INFOS		"SELECT `client_credits`,`client_name` FROM `t_client` WHERE `client_steamid64`=\"%s\""
+#define QUERY_UPDATE_CLIENT_INFOS	"UPDATE `t_client` SET `client_name`=\"%s\", `client_credits`=%i WHERE `client_steamid64`=\"%s\";"
+#define QUERY_INSERT_CLIENT			"INSERT INTO `t_client` (`client_steamid64`,`client_name`,`client_credits`) VALUES (\"%s\", \"%s\", %i);"
+#define QUERY_INSERT_UPGRADE		"INSERT INTO `t_upgrade` (`upgrade_id`, `upgrade_name`, `upgrade_type`, `upgrade_cost`, `upgrade_description1`, `upgrade_description2`, `upgrade_maxvalue`, `upgrade_increasevalue`, `upgrade_defaultvalue`, `upgrade_attributname`) VALUES (\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\");"
+#define QUERY_SELECT_UPGRADE		"SELECT `upgrade_id`, `upgrade_type`, `upgrade_cost`, `upgrade_maxvalue`, `upgrade_increasevalue`, `upgrade_defaultvalue`, `upgrade_attributname` FROM `t_upgrade` WHERE `upgrade_id`=\"%s\""
+#define QUERY_UPDATE_UPGRADE		"UPDATE `t_upgrade` SET `upgrade_type`=\"%s\", `upgrade_cost`=\"%s\", `upgrade_maxvalue`=\"%s\", `upgrade_increasevalue`=\"%s\", `upgrade_defaultvalue`=\"%s\", `upgrade_attributname`=\"%s\", `upgrade_description1`=\"%s\", `upgrade_description2`=\"%s\" WHERE `upgrade_id`=\"%i\""
+#define QUERY_UPDATE_CLIENTUPGRADE	"UPDATE `t_clientupgrade` SET `has_changed` = 1 WHERE `t_upgrade_id`=\"%i\""
+#define QUERY_SELECT_UPGRADECLIENTC	"SELECT `clientupgrade_spent` FROM `t_clientupgrade` WHERE `t_client_steamid64`=\"%s\" AND `has_changed`=1"
+#define QUERY_UPDATE_CLIENTCREDIT	"UPDATE `t_client` SET `client_credits`=`client_credits`+%i WHERE `client_steamid64`=\"%s\""
+#define QUERY_DELETE_CLIENTUPGRADEC	"DELETE FROM `t_clientupgrade` WHERE `has_changed`=1 AND `t_client_steamid64`=\"%s\"; "
+#define QUERY_SELECT_CLIENTUPGRADE	"SELECT `clientupgrade_attributname`, `clientupgrade_currentvalue` FROM `t_clientupgrade` WHERE `t_client_steamid64`=\"%s\"; "
+#define QUERY_SELECT_CLIENTUPBYID	"SELECT `clientupgrade_attributname`, `clientupgrade_currentvalue`, `clientupgrade_spent` FROM `t_clientupgrade` WHERE `t_client_steamid64`=\"%s\" AND `t_upgrade_id`=\"%i\";"
+#define QUERY_UPDATE_CLIENTUPBYID	"UPDATE `t_clientupgrade` SET `clientupgrade_currentvalue`=\"%.2f\", `clientupgrade_spent`=%i WHERE `t_client_steamid64`=\"%s\" AND `t_upgrade_id`=\"%i\";"
+#define QUERY_INSERT_CLIENTUPBYID	"INSERT INTO `t_clientupgrade` (`clientupgrade_currentvalue`, `clientupgrade_attributname`, `clientupgrade_spent`, `has_changed`, `t_client_steamid64`, `t_upgrade_id`) VALUES ('%.2f', '%s', '%i', '0', '%s', '%i')"
+#define QUERY_DELETE_ALLBOUGHTUPGRD	"DELETE FROM `t_clientupgrade` WHERE `t_client_steamid64`=\"%s\";"
+#define QUERY_SELECT_ALLUPGRDCLIENT	"SELECT `clientupgrade_spent` FROM `t_clientupgrade` WHERE `t_client_steamid64`=\"%s\""
 
 Transaction DBTRANS_UpdateUpgrade;
 Transaction DBTRANS_SelectBoughtUpgrade;
