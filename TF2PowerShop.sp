@@ -5,9 +5,10 @@
 
 #pragma newdecls required
 
-#define PLUGIN_AUTHOR 	"Arkarr"
-#define PLUGIN_VERSION 	"1.0"
-#define PLUGIN_TAG 		"{purple}[TF2 Power Shop]{default}"
+#define PLUGIN_AUTHOR 			"Arkarr"
+#define PLUGIN_VERSION 			"3.1"
+#define PLUGIN_TAG 				"{purple}[TF2 Power Shop]{default}"
+#define PLUGIN_TAG_NO_COLORS 	"[TF2 Power Shop]"
 
 #define TEAM_LESS 	0
 #define TEAM_SPEC 	1
@@ -187,7 +188,11 @@ public Action CMD_AddCredits(int client, int args)
 {
 	if (args != 2)
 	{
-		CPrintToChat(client, "%s Usage : sm_addcredit <target> <ammount>.", PLUGIN_TAG);
+		if(client == 0)
+			PrintToServer("%s Usage : sm_addcredit <target> <ammount>.", PLUGIN_TAG_NO_COLORS);
+		else
+			CPrintToChat(client, "%s Usage : sm_addcredit <target> <ammount>.", PLUGIN_TAG);
+			
 		return Plugin_Handled;
 	}
 	
