@@ -117,8 +117,8 @@ public void OnPluginStart()
 	CVAR_DeathDeduction = CreateConVar("sm_tf2ps_death_deduction", "5", "How much credit to deduct when you die.", _, true, _, false, _);
 	CVAR_CommandRestriction = CreateConVar("sm_tf2ps_shop_restriction", "-1", "Restric the command !shop to 1 team only. (-1 no restriction, 0 RED only, 1 BLU only)", _, true, -1.0, true, 1.0);
 	CVAR_DBConfigurationName = CreateConVar("sm_tf2ps_configuration_name", "powershop", "Configuration name in database.cfg, by default, all results are saved in the sqlite database.");
-	CVAR_HUD_Position_X = CreateConVar("sm_tf2ps_HUD_position_x", "0.14", "Configuration name in database.cfg, by default, all results are saved in the sqlite database.");
-	CVAR_HUD_Position_Y = CreateConVar("sm_tf2ps_HUD_position_y", "0.9", "Configuration name in database.cfg, by default, all results are saved in the sqlite database.");
+	CVAR_HUD_Position_X = CreateConVar("sm_tf2ps_HUD_position_x", "0.14", "HUD X-coordinate position");
+	CVAR_HUD_Position_Y = CreateConVar("sm_tf2ps_HUD_position_y", "0.9", "HUD Y-coordinate position");
 	
 	RegConsoleCmd("sm_shop", CMD_DisplayShop, "Display the shop menu.");
 	RegConsoleCmd("sm_credits", CMD_DisplayCredits, "Display the your credits ammount.");
