@@ -11,6 +11,7 @@
 		"pt-br"		"Reiniciando database..."
 		"fr"		"Remise a 0 de la base de données"
 		"tr"		"Veritabanı sıfırlanıyor..."
+		"ru"		"Сбрасываем базу данных..."
 	}
 	"Database_failed"
 	{
@@ -22,6 +23,7 @@
 		"pt-br"		"Falha na database: {1}"
 		"fr"		"Base de données défecteux: {1}"
 		"tr"		"Veritabanı hatası: {1}";
+		"ru"		"Ошибка в базе данных: {1}";
 	}
 	//menu
 	"menu_yes"
@@ -30,6 +32,7 @@
 		"de"		"Ja"
 		"fr"		"Oui"
 		"tr"		"Evet"
+		"ru"		"Да"
 	}
 	"menu_no"
 	{
@@ -37,5 +40,6 @@
 		"de"		"Nein"
 		"fr"		"Non"
 		"tr"		"Hayır"
+		"ru"		"Нет"
 	}
 }
